@@ -1,0 +1,23 @@
+*==============================*
+   **IKEA FOOD & SUPERMARKET**   
+
+RECEIPT: #123
+
+Cashier:		Date:2024-11-18
+			    Time: 12:42:43
+Papaya 		3 * 38 = 114,00 kr 
+Orange 		2 * 38 = 76,00 kr 
+Nectar 		4 * 8 = 32,00 kr 
+Dragon 		2 * 15 = 30,00 kr 
+Sharon 		5 * 20 = 100,00 kr 
+Berry 		2 * 18 = 36,00 kr 
+Olive 		1 * 35 = 35,00 kr 
+Milk 		2 * 10 = 20,00 kr 
+Coffee 		1 * 35 = 35,00 kr 
+Apple 		18 * 10 = 144,00 kr 
+Banana 		5 * 8 = 40,00 kr 
+*************************************
+Total: 				 662,00 kr
+*************************************
+
+**Thank you, Welcome back!** 

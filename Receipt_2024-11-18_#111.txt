@@ -1,0 +1,18 @@
+*==============================*
+   **IKEA FOOD & SUPERMARKET**   
+
+RECEIPT: #111
+
+Cashier:		Date:2024-11-18
+			    Time: 09:25:56
+Orange 		2 * 25 = 45,00 kr 
+Gurka 		2 * 12 = 18,00 kr 
+Banana 		20 * 8 = 160,00 kr 
+Apple 		5 * 10 = 40,00 kr 
+Coffee 		2 * 35 = 70,00 kr 
+Milk 		3 * 10 = 30,00 kr 
+*************************************
+Total: 				 363,00 kr
+*************************************
+
+**Thank you, Welcome back!** 
