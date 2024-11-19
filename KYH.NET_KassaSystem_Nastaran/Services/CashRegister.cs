@@ -8,35 +8,34 @@ using KYH.NET_KassaSystem_Nastaran.Models;
 using KYH.NET_KassaSystem_Nastaran.Services;
 
 
-
 namespace KYH.NET_KassaSystem_Nastaran.Services
 {
     public class CashRegister
     {
         private Admin _admin;
-        //private Admin _admin = new Admin(new List<Product>()); // Skapa instans av Admin för att hantera produkter
-        private Receipt currentReceipt; // Kvitto för aktuell transaktion
-        private IErrorManager errorManager = new ErrorManager(); // Instans av felhanterare
+        private Receipt currentReceipt;
+        private IErrorManager errorManager = new ErrorManager(); 
 
         public CashRegister()
         {
-            var adminTool = new AdminTool(); // Skapa en instans av AdminTool
-            _admin = new Admin(adminTool);   // Skicka AdminTool-instansen till Admin
+
+            var adminTool = new AdminTool(); 
+            _admin = new Admin(adminTool);   
+
         }
-
-
 
         // Starta huvudloopen för kassan
         public void Start()
         {
             while (true)
             {
+
                 Console.WriteLine();
-                Console.WriteLine("1. Ny Kund\n2. Admin\n0. Avsluta"); // Visa alternativ
+                Console.WriteLine("1. Ny Kund\n2. Admin\n0. Avsluta"); 
                 var input = Console.ReadLine();
                 if (input == "1")
                 {
-                    StartNewTransactionTest(); // Starta ny kundtransaktion
+                    StartNewTransactionTest(); 
                 }
                 else if (input == "2")
                 {
@@ -44,27 +43,30 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 }
                 else if (input == "0")
                 {
-                    break; // Avsluta programmet
+                    break; 
                 }
             }
+
         }
 
         // Starta en ny transaktion för en kund
         public void StartNewTransactionTest()
         {
-            currentReceipt = new Receipt(errorManager); // Skapa ett nytt kvitto
+
+            currentReceipt = new Receipt(errorManager); 
             Console.WriteLine("KASSA");
-            Console.WriteLine($"KVITTO:\t\t{DateTime.Now:yyyy-MM-dd\t HH:mm:ss}"); // Visa kassaskärm med datum
+            Console.WriteLine($"KVITTO:\t\t{DateTime.Now:yyyy-MM-dd\t HH:mm:ss}"); 
 
             while (true)
             {
-                Console.WriteLine("Kommandon: <productid> <antal> eller PAY"); // Inmatningskommando för produkter eller betalning
+
+                Console.WriteLine("Kommandon: <productid> <antal> eller PAY"); 
                 var command = Console.ReadLine()?.Split(' ');
 
-                if (command[0] == "PAY") // Om kunden vill betala
+                if (command[0] == "PAY") 
                 {
-                    currentReceipt.PrintAndSaveReceipt(); // Skriv ut och spara kvittot
-                    break; // Avsluta transaktionen
+                    currentReceipt.PrintAndSaveReceipt(); 
+                    break; 
                 }
                 else if (int.TryParse(command[0], out int productId) && int.TryParse(command[1], out int quantity))
                 {
@@ -74,11 +76,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                         var product = _admin.Products.FirstOrDefault(p => p.Id == productId);
                         if (product != null)
                         {
-                            // Beräkna det effektiva priset baserat på dagens datum
-                            decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
+                             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
 
-                            // Lägg till produkten i kvittot med rätt pris
-                            currentReceipt.AddItem(product, quantity);
+                             currentReceipt.AddItem(product, quantity);
                         }
                         else
                         {
@@ -88,7 +88,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                     catch (Exception ex)
                     {
                         errorManager.LogError(ex); // Logga fel
-                        errorManager.DisplayError("Ett fel inträffade vid tillägg av produkt."); // Visa felmeddelande
+                        errorManager.DisplayError("Ett fel inträffade vid tillägg av produkt.");
                     }
                 }
                 else
