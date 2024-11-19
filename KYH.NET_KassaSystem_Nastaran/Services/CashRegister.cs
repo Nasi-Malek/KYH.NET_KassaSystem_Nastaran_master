@@ -50,7 +50,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
         }
 
-        // Starta en ny transaktion för en kund
+
         public void StartNewTransactionTest()
         {
 
@@ -89,7 +89,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                     }
                     catch (Exception ex)
                     {
-                        errorManager.LogError(ex); // Logga fel
+                        errorManager.LogError(ex); 
                         errorManager.DisplayError("An error occurred while adding product.");
                     }
                 }
