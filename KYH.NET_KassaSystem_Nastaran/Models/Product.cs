@@ -4,16 +4,15 @@ using System.Linq;
 using KYH.NET_KassaSystem_Nastaran.Services;
 
 
-
 namespace KYH.NET_KassaSystem_Nastaran.Models
 {
     public class Product
     {
-        public int Id { get; set; } // Unikt ID för produkten
-        public string Name { get; set; } // Namn på produkten
-        public decimal Price { get; set; } // Standardpris för produkten
-        public string PriceType { get; set; } // Pristyp: "per unit" eller "per kg"
-        public List<Campaign> Campaigns { get; set; } = new List<Campaign>(); // Lista över aktiva kampanjer för produkten
+        public int Id { get; set; } 
+        public string Name { get; set; } 
+        public decimal Price { get; set; } 
+        public string PriceType { get; set; } 
+        public List<Campaign> Campaigns { get; set; } = new List<Campaign>(); 
 
         public Product(int id, string name, decimal price, string priceType)
         {
@@ -28,9 +27,6 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             PriceType = priceType;
         }
 
-       
-        /// </summary>
-        /// <param name="campaign">Kampanjen som ska läggas till.</param>
         public void AddCampaign(Campaign campaign)
         {
             if (campaign == null)
@@ -39,9 +35,6 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             Campaigns.Add(campaign);
         }
 
-     
-        /// </summary>
-        /// <param name="campaign">Kampanjen som ska tas bort.</param>
         public void RemoveCampaign(Campaign campaign)
         {
             if (campaign == null)
@@ -50,10 +43,6 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             Campaigns.Remove(campaign);
         }
 
-       
-        /// </summary>
-        /// <param name="date">Datumet för att kontrollera kampanjaktivitet.</param>
-        /// <returns>Det justerade priset baserat på kampanj.</returns>
         public decimal GetEffectivePrice(DateTime date)
         {
             var activeCampaign = Campaigns.FirstOrDefault(c => c.IsActive(date));
