@@ -18,6 +18,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
         public List<Product> Products => _products;
 
+
         // Visa huvudmenyn för Admin
         public void ShowAdminMenu()
         {
@@ -69,6 +70,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 }
             } while (choice != 5);
         }
+
 
         // 1. Uppdatera produktnamn eller pris
         private void UpdateProductDetails()

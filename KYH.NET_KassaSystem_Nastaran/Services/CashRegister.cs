@@ -8,34 +8,35 @@ using KYH.NET_KassaSystem_Nastaran.Models;
 using KYH.NET_KassaSystem_Nastaran.Services;
 
 
+
 namespace KYH.NET_KassaSystem_Nastaran.Services
 {
     public class CashRegister
     {
         private Admin _admin;
         private Receipt currentReceipt;
-        private IErrorManager errorManager = new ErrorManager(); 
+        private IErrorManager errorManager = new ErrorManager();
 
         public CashRegister()
         {
 
-            var adminTool = new AdminTool(); 
-            _admin = new Admin(adminTool);   
+            var adminTool = new AdminTool();
+            _admin = new Admin(adminTool);
 
         }
 
-        // Starta huvudloopen för kassan
+
         public void Start()
         {
             while (true)
             {
 
                 Console.WriteLine();
-                Console.WriteLine("1. Ny Kund\n2. Admin\n0. Avsluta"); 
+                Console.WriteLine("1. New customer\n2. Admin\n0. Exit");
                 var input = Console.ReadLine();
                 if (input == "1")
                 {
-                    StartNewTransactionTest(); 
+                    StartNewTransactionTest();
                 }
                 else if (input == "2")
                 {
@@ -43,7 +44,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 }
                 else if (input == "0")
                 {
-                    break; 
+                    break;
                 }
             }
 
@@ -53,47 +54,48 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public void StartNewTransactionTest()
         {
 
-            currentReceipt = new Receipt(errorManager); 
-            Console.WriteLine("KASSA");
-            Console.WriteLine($"KVITTO:\t\t{DateTime.Now:yyyy-MM-dd\t HH:mm:ss}"); 
+            currentReceipt = new Receipt(errorManager);
+            Console.WriteLine("CASH");
+            Console.WriteLine($"RECEIPT:\t\t{DateTime.Now:yyyy-MM-dd\t HH:mm:ss}");
 
             while (true)
             {
 
-                Console.WriteLine("Kommandon: <productid> <antal> eller PAY"); 
+                Console.WriteLine("Commands: <product ID> <number> or PAY");
                 var command = Console.ReadLine()?.Split(' ');
 
-                if (command[0] == "PAY") 
+                if (command[0] == "PAY")
                 {
-                    currentReceipt.PrintAndSaveReceipt(); 
-                    break; 
+                    currentReceipt.PrintAndSaveReceipt();
+                    break;
                 }
                 else if (int.TryParse(command[0], out int productId) && int.TryParse(command[1], out int quantity))
                 {
                     try
                     {
-                        // Hämta produkten via produkt-ID och kvantitet
+
                         var product = _admin.Products.FirstOrDefault(p => p.Id == productId);
                         if (product != null)
                         {
-                             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
+                            decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
 
-                             currentReceipt.AddItem(product, quantity);
+
+                            currentReceipt.AddItem(product, quantity);
                         }
                         else
                         {
-                            Console.WriteLine("Produkten med angivet ID hittades inte.");
+                            Console.WriteLine("The product with the specified id was not found.");
                         }
                     }
                     catch (Exception ex)
                     {
                         errorManager.LogError(ex); // Logga fel
-                        errorManager.DisplayError("Ett fel inträffade vid tillägg av produkt.");
+                        errorManager.DisplayError("An error occurred while adding product.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Ogiltigt kommando. Ange produkt-ID och antal, eller PAY för att avsluta transaktionen.");
+                    Console.WriteLine("Invalid command. Enter product-ID and quantity, or PAY to end the transaction.");
                 }
             }
         }

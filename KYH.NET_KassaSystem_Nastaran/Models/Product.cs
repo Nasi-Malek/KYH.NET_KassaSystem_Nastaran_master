@@ -4,15 +4,16 @@ using System.Linq;
 using KYH.NET_KassaSystem_Nastaran.Services;
 
 
+
 namespace KYH.NET_KassaSystem_Nastaran.Models
 {
     public class Product
     {
-        public int Id { get; set; } 
-        public string Name { get; set; } 
-        public decimal Price { get; set; } 
-        public string PriceType { get; set; } 
-        public List<Campaign> Campaigns { get; set; } = new List<Campaign>(); 
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string PriceType { get; set; }
+        public List<Campaign> Campaigns { get; set; } = new List<Campaign>();
 
         public Product(int id, string name, decimal price, string priceType)
         {
@@ -30,7 +31,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
         public void AddCampaign(Campaign campaign)
         {
             if (campaign == null)
-                throw new ArgumentNullException(nameof(campaign), "Kampanjen kan inte vara null.");
+                throw new ArgumentNullException(nameof(campaign), "The campaign cannot be zero.");
 
             Campaigns.Add(campaign);
         }
@@ -38,7 +39,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
         public void RemoveCampaign(Campaign campaign)
         {
             if (campaign == null)
-                throw new ArgumentNullException(nameof(campaign), "Kampanjen kan inte vara null.");
+                throw new ArgumentNullException(nameof(campaign), "The campaign cannot be zero.");
 
             Campaigns.Remove(campaign);
         }

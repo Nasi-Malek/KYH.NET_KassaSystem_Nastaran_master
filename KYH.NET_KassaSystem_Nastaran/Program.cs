@@ -17,7 +17,7 @@ namespace KYH.NET_KassaSystem_Nastaran
             Admin admin = new Admin(new AdminTool());
             var errorManager = new ErrorManager();
             var receipt = new Receipt(errorManager);
-           
+
 
             while (true)
             {
@@ -25,11 +25,11 @@ namespace KYH.NET_KassaSystem_Nastaran
                 {
 
                     Console.Clear();
-                    Console.WriteLine("\n---** Huvud Meny **---\n");
-                    Console.WriteLine("1. Ny Kund");
+                    Console.WriteLine("\n---** Main Menu **---\n");
+                    Console.WriteLine("1. New Customer");
                     Console.WriteLine("2. Admin");
-                    Console.WriteLine("0. Avsluta");
-                    Console.Write("\nVälj ett alternativ: ");
+                    Console.WriteLine("0. Exit");
+                    Console.Write("\nSelect an Option: ");
 
                     // Läsa in användarens val
                     if (int.TryParse(Console.ReadLine(), out int choice))
@@ -42,28 +42,28 @@ namespace KYH.NET_KassaSystem_Nastaran
                             case 2:
                                 admin.ShowAdminMenu();
                                 break;
-                            case 0:                            
-                                Console.WriteLine("\nProgrammet avslutas. Tack för att du använde vår applikation!");
+                            case 0:
+                                Console.WriteLine("\nThe program is closing. Thank you for using our application!");
                                 Environment.Exit(0);
                                 break;
                             default:
-                                Console.WriteLine("\nOgiltigt val. Försök igen.");
+                                Console.WriteLine("\nInvalid selection, Try again.");
                                 break;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("\nFelaktig inmatning. Ange ett giltigt nummer.");
+                        Console.WriteLine("\nIncorrect input. Enter a valid number.");
                     }
                 }
                 catch (Exception ex)
                 {
                     // Hantera oväntade fel
                     errorManager.LogError(ex);
-                    errorManager.DisplayError("Ett oväntat fel inträffade. Försök igen.");
+                    errorManager.DisplayError("An unexpected error occurred. Please try again.");
                 }
 
-                Console.WriteLine("\nTryck på valfri tangent för att fortsätta...");
+                Console.WriteLine("\nPress any key to continue...");
                 Console.ReadKey();
             }
         }
@@ -73,8 +73,8 @@ namespace KYH.NET_KassaSystem_Nastaran
             try
             {
                 Console.Clear();
-                Console.WriteLine("--- Kund Meny ---\n");
-                Console.WriteLine("Här kan du lägga till produkter, hantera kvitton m.m.");
+                Console.WriteLine("---  Main Menu ---\n");
+                Console.WriteLine("Here you can add products, manage receipts, etc.");
 
 
                 var cashRegister = new CashRegister();
@@ -87,9 +87,8 @@ namespace KYH.NET_KassaSystem_Nastaran
             catch (Exception ex)
             {
 
-                Console.WriteLine("Ett fel inträffade när kundfunktionen hanterades: " + ex.Message);
+                Console.WriteLine("An error occurred while handling the client function: " + ex.Message);
             }
         }
-
     }
 }

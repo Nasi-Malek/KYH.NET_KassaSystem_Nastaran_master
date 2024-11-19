@@ -8,7 +8,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
     public class Campaign
     {
         public CampaignType Type { get; set; }
-        public decimal DiscountValue { get; set; } // Kan vara procent eller fast rabatt beroende på typ
+        public decimal DiscountValue { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
@@ -26,11 +26,10 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             EndDate = endDate;
         }
 
-        // Kontrollera om kampanjen är aktiv för ett visst datum
         public bool IsActive(DateTime date) => date >= StartDate && date <= EndDate;
 
 
-        // Beräkna priset baserat på kampanjtypen
+
         public decimal ApplyDiscount(decimal originalPrice)
         {
             if (originalPrice < 0)

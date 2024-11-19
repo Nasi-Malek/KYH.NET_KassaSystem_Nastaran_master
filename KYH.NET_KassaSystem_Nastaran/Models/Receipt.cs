@@ -28,25 +28,70 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
         public void AddItem(Product product, int quantity)
         {
-            if (product == null)
-            {
-                _errorManager.DisplayError("Produkten är ogiltig.");
+            if (!ValidateProduct(product))
                 return;
-            }
-            if (quantity <= 0)
-            {
-                _errorManager.DisplayError("Antalet måste vara positivt.");
-                return;
-            }
 
-            foreach (var campaign in product.Campaigns)
-            {
-                Console.WriteLine($"Kampanj: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}, Slut: {campaign.EndDate:yyyy-MM-dd}");
-            }
+            if (!ValidateQuantity(quantity))
+                return;
+
+            ValidateCampaigns(product);
 
             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
             Items.Add((product, quantity));
             Console.WriteLine($"Produkt: {product.Name}\nAntal: {quantity}\nPris: {effectivePrice:C}");
+        }
+
+        private bool ValidateProduct(Product product)
+        {
+            if (product == null)
+            {
+                _errorManager.DisplayError("The product is invalid.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(product.Name))
+            {
+                _errorManager.DisplayError("The product does not have a valid name.");
+                return false;
+            }
+
+            if (product.Price <= 0)
+            {
+                _errorManager.DisplayError($"Produkten '{product.Name}' har ett ogiltigt pris: {product.Price:C}. Priset måste vara större än 0.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateQuantity(int quantity)
+        {
+            if (quantity <= 0)
+            {
+                _errorManager.DisplayError("Antalet måste vara större än 0.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ValidateCampaigns(Product product)
+        {
+            foreach (var campaign in product.Campaigns)
+            {
+                if (campaign.StartDate > campaign.EndDate)
+                {
+                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' har ett ogiltigt datumintervall: Startdatum {campaign.StartDate:yyyy-MM-dd} är efter slutdatum {campaign.EndDate:yyyy-MM-dd}.");
+                }
+                else if (campaign.EndDate < DateTime.Now)
+                {
+                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' är inte längre giltig (Slutdatum: {campaign.EndDate:yyyy-MM-dd}).");
+                }
+                else
+                {
+                    Console.WriteLine($"Kampanj: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}, Slut: {campaign.EndDate:yyyy-MM-dd}");
+                }
+            }
         }
 
         private decimal CalculateTotalExcludingVat()
@@ -74,7 +119,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             {
                 writer.WriteLine("*===================================================*");
                 writer.WriteLine("\t\t** FOOD & SUPERMARKET SOLNA **\n");
-                writer.WriteLine(" Opening hrs:\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
+                writer.WriteLine(" Opening hrs:\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
                 writer.WriteLine("-----------------------------------------------------");
                 writer.WriteLine($"Cashier: 1214\t\tRECEIPT: #{ReceiptNumber}");
                 writer.WriteLine($"Date: {Date:yyyy-MM-dd}\tTime: {Date:HH:mm:ss}");
@@ -85,23 +130,23 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                     writer.WriteLine($"{item.product.Name}\t{item.quantity} x {item.product.Price:C} = {itemTotal:C}");
                 }
                 writer.WriteLine("-----------------------------------------------------");
-                writer.WriteLine($"Total (exkl. moms): {totalExclVat:C}");
-                writer.WriteLine($"Moms (25%):         {vat:C}");
-                writer.WriteLine($"Total (inkl. moms): {totalInclVat:C}");
+                writer.WriteLine($"Total (excl. VAT): {totalExclVat:C}");
+                writer.WriteLine($"VAT (25%):         {vat:C}");
+                writer.WriteLine($"Total (incl. VAT): {totalInclVat:C}");
                 writer.WriteLine("-----------------------------------------------------");
-                writer.WriteLine("\t\t** Tack, Välkommen åter! **");
+                writer.WriteLine("\t\t** Thank you, Welcome back! **");
             }
 
-            Console.WriteLine("\n--- Kvitto ---");
+            Console.WriteLine("\n--- Receipt ---");
             foreach (var item in Items)
             {
                 decimal itemTotal = item.product.GetEffectivePrice(Date) * item.quantity;
                 Console.WriteLine($"{item.product.Name}\t{item.quantity} x {item.product.Price:C} = {itemTotal:C}");
             }
             Console.WriteLine("------------------------");
-            Console.WriteLine($"Total (exkl. moms): {totalExclVat:C}");
-            Console.WriteLine($"Moms (25%): {vat:C}");
-            Console.WriteLine($"Total (inkl. moms): {totalInclVat:C}");
+            Console.WriteLine($"Total (excl. VAT): {totalExclVat:C}");
+            Console.WriteLine($"VAT (25%):         {vat:C}");
+            Console.WriteLine($"Total (incl. VAT): {totalInclVat:C}");
             Console.WriteLine("------------------------");
 
             SaveReceiptCounter();
@@ -119,6 +164,5 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         {
             File.WriteAllText("ReceiptCounter.txt", receiptCounter.ToString());
         }
-
     }
 }
