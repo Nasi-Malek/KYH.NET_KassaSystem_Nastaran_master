@@ -13,22 +13,22 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
     {
         private readonly IErrorManager _errorManager;
 
-        private static int receiptCounter = LoadReceiptCounter(); // Laddar senaste kvittonummer från fil
+        private static int receiptCounter = LoadReceiptCounter();
         public int ReceiptNumber { get; private set; }
         public List<(Product product, int quantity)> Items { get; private set; } = new List<(Product, int)>();
         public DateTime Date { get; private set; }
 
 
-        private static string receiptCounterFilePath = "ReceiptCounter.txt"; // Sökväg för filen som lagrar kvittonumret
-        private static string receiptFilePath = "../../../Files/Receipts"; // Sökväg för filen som lagrar kvittoutskrifter
-
+        private static string receiptCounterFilePath = "ReceiptCounter.txt";
+        private static string receiptFilePath = "../../../Files/Receipts";
 
         public Receipt(IErrorManager errorManager)
         {
             _errorManager = errorManager;
 
             Date = DateTime.Now;
-            ReceiptNumber = receiptCounter; // Öka kvittonumret för varje nytt kvitto
+            ReceiptNumber = receiptCounter;
+
         }
 
         // Lägg till produkt och kvantitet till kvittot
@@ -43,17 +43,15 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             {
                 foreach (var campaign in product.Campaigns)
                 {
-                    Console.WriteLine($"Campaign type: {campaign.Type}, Start: {campaign.StartDate}, End: {campaign.EndDate}, Active?(true/False): {campaign.IsActive(DateTime.Now)}");
+                    Console.WriteLine($"Campaign: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}\n\t\t\t      End: {campaign.EndDate:yyyy-MM-dd}  Time: {Date:HH:mm:ss}");
+
                 }
-                // Hämta det effektiva priset baserat på dagens datum
+
                 decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
 
-
-                // Lägg till produkten och mängden i listan
                 Items.Add((product, quantity));
 
-                // Eventuellt logga till konsolen (för debugging)
-                Console.WriteLine($"Product added: {product.Name}, Quantity: {quantity}, Price: {effectivePrice} kr");
+                Console.WriteLine($"Product : {product.Name}\n\t Quantity: {quantity}\n\t Price: {effectivePrice} kr\n");
             }
             catch (Exception ex)
             {
@@ -62,7 +60,6 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             }
         }
 
-        // Beräkna totalkostnaden för alla produkter i kvittot
         public decimal CalculateTotal()
         {
             try
@@ -77,63 +74,60 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             }
         }
 
-        // Skriv ut och spara kvittot i en textfil
         public void PrintAndSaveReceipt()
         {
-            ReceiptNumber = receiptCounter++; // Öka och tilldela kvittonummer vid sparandet
+            ReceiptNumber = receiptCounter++;
 
             if (!Directory.Exists(receiptFilePath))
                 Directory.CreateDirectory(receiptFilePath);
 
             string filePath = Path.Combine(receiptFilePath, $"Receipt_{Date:yyyy-MM-dd}_#{ReceiptNumber}.txt");
-            using (StreamWriter writer = new StreamWriter(filePath, true)) // Öppna filen i tilläggsläge
+            using (StreamWriter writer = new StreamWriter(filePath, true))
             {
                 // Kvittohuvud och transaktionsinformation
-                writer.WriteLine("*==============================*");
-                writer.WriteLine("   **IKEA FOOD & SUPERMARKET**   \n");
-                writer.WriteLine($"RECEIPT: #{ReceiptNumber}\n");
-                writer.WriteLine($"Cashier:\t\tDate:{Date:yyyy-MM-dd}\n\t\t\t    Time: {Date:HH:mm:ss}");
-                Console.WriteLine("\n   Thank you, Welcome back!");
+                writer.WriteLine("*===================================================*");
+                writer.WriteLine("    \t\t** FOOD & SUPERMARKET SOLNA **\n");
 
-                
+                writer.WriteLine(" Opening hrs:\t\t\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00\t\t");
+                writer.WriteLine("-----------------------------------------------------");
+                writer.WriteLine($"Cashier:1214\t\t\t\t         RECEIPT: #{ReceiptNumber}");
+                writer.WriteLine($"Date: {Date:yyyy-MM-dd}\t\t\t\t     Time: {Date:HH:mm:ss}");
+                writer.WriteLine("------------------------------------------------------");
 
                 // Totalkostnad
                 decimal total = CalculateTotal();
-                writer.WriteLine("*************************************");
                 foreach (var item in Items)
                 {
-
                     decimal itemTotal = item.product.GetEffectivePrice(Date) * item.quantity;
-                    writer.WriteLine($"{item.product.Name} \t\t{item.quantity} * {item.product.Price} = {itemTotal:0.00} kr ");
-
-
+                    writer.WriteLine($"{item.product.Name} \t\t\t\t\t\t\t{item.quantity} * {item.product.Price} = {itemTotal:0.00} kr ");
                 }
-                writer.WriteLine("*************************************");
-                writer.WriteLine($"Total: \t\t\t\t {total:0.00} kr");
-                writer.WriteLine(new string('-', 35));
-                writer.WriteLine("\n**Thank you, Welcome back!** ");
+
+                writer.WriteLine("******************************************************");
+                writer.WriteLine($"Total: \t\t\t\t\t\t\t\t     {total:0.00} kr");
+                writer.WriteLine("******************************************************");
+                writer.WriteLine("\n\t\t\t**Thank you, Welcome back!**\n\t\t\t\t   Tel:08-72360000 ");
 
                 // Konsolutdata för kvitto
+                Console.WriteLine("*----------------------------------------------*");
+                Console.WriteLine("   \t** FOOD & SUPERMARKET SOLNA **\n");
+                Console.WriteLine(" Opening hrs:\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00\t\t");
+                Console.WriteLine("------------------------------------------------");
+                Console.WriteLine($"Cashier:1214\t\t\tRECEIPT: #{ReceiptNumber}");
+                Console.WriteLine($"Date: {Date:yyyy-MM-dd}\t\tTime: {Date:HH:mm:ss}");
+                Console.WriteLine("*-----------------------------------------------*");
 
-                Console.WriteLine("*===================================*");
-                Console.WriteLine("    **IKEA FOOD & SUPERMARKET**\n");
-                Console.WriteLine($"RECEIPT:  #{ReceiptNumber}\n");
-                Console.WriteLine($"Cashier:\tDate: {Date:yyyy-MM-dd}\n\t\tTime: {Date:HH:mm:ss}");
-                Console.WriteLine("*===================================*");
                 foreach (var item in Items)
                 {
 
                     decimal itemTotal = item.product.GetEffectivePrice(Date) * item.quantity;
-                    Console.WriteLine($"{item.product.Name} \t\t{item.quantity} * {item.product.Price} = {itemTotal:0.00} kr ");
-
+                    Console.WriteLine($"{item.product.Name} \t\t\t\t{item.quantity} * {item.product.Price} = {itemTotal:0.00} kr ");
 
                 }
-                Console.WriteLine("*************************************");
-                Console.WriteLine($"Total : \t\t{total} kr");
-                Console.WriteLine("*************************************");
+                Console.WriteLine("*************************************************");
+                Console.WriteLine($"Total : \t\t\t\t {total:0.00} kr");
+                Console.WriteLine("*************************************************");
             }
 
-            // Uppdatera kvittonummer i fil
             SaveReceiptCounter();
         }
 
@@ -145,8 +139,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
                 return int.Parse(File.ReadAllText(path));
             return 0; // Om filen inte finns, börja på 0
         }
-        // Spara uppdaterat kvittonummer till fil
+
         private static void SaveReceiptCounter()
+
         {
             File.WriteAllText("ReceiptCounter.txt", receiptCounter.ToString()); // Skriv senaste numret till fil
         }
