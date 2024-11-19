@@ -17,7 +17,7 @@ namespace KYH.NET_KassaSystem_Nastaran
             Admin admin = new Admin(new AdminTool());
             var errorManager = new ErrorManager();
             var receipt = new Receipt(errorManager);
-            var adminTool = new AdminTool();
+           
 
             while (true)
             {
@@ -42,7 +42,7 @@ namespace KYH.NET_KassaSystem_Nastaran
                             case 2:
                                 admin.ShowAdminMenu();
                                 break;
-                            case 0:
+                            case 0:                            
                                 Console.WriteLine("\nProgrammet avslutas. Tack för att du använde vår applikation!");
                                 Environment.Exit(0);
                                 break;
@@ -90,5 +90,6 @@ namespace KYH.NET_KassaSystem_Nastaran
                 Console.WriteLine("Ett fel inträffade när kundfunktionen hanterades: " + ex.Message);
             }
         }
+
     }
 }
