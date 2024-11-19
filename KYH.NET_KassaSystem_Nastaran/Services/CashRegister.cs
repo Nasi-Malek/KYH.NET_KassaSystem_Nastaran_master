@@ -61,7 +61,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             while (true)
             {
 
-                Console.WriteLine("Commands: <product ID> <number> or PAY");
+                Console.WriteLine("Commands: <productID> <number> or PAY");
                 var command = Console.ReadLine()?.Split(' ');
 
                 if (command[0] == "PAY")

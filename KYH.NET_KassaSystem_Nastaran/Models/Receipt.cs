@@ -38,7 +38,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
             Items.Add((product, quantity));
-            Console.WriteLine($"Produkt: {product.Name}\nAntal: {quantity}\nPris: {effectivePrice:C}");
+            Console.WriteLine($"Product: {product.Name}\nNumber: {quantity}\nPrice: {effectivePrice:C}");
         }
 
         private bool ValidateProduct(Product product)
@@ -81,15 +81,15 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             {
                 if (campaign.StartDate > campaign.EndDate)
                 {
-                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' har ett ogiltigt datumintervall: Startdatum {campaign.StartDate:yyyy-MM-dd} är efter slutdatum {campaign.EndDate:yyyy-MM-dd}.");
+                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' har ett ogiltigt datumintervall: Startdatum {campaign.StartDate:yyyy-MM-dd} är efter slutdatum {campaign.EndDate:yyyy-MM-dd} .");
                 }
                 else if (campaign.EndDate < DateTime.Now)
                 {
-                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' är inte längre giltig (Slutdatum: {campaign.EndDate:yyyy-MM-dd}).");
+                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' är inte längre giltig (Slutdatum: {campaign.EndDate:yyyy-MM-dd} ).");
                 }
                 else
                 {
-                    Console.WriteLine($"Kampanj: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}, Slut: {campaign.EndDate:yyyy-MM-dd}");
+                    Console.WriteLine($"Campaign: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}, End: {campaign.EndDate:yyyy-MM-dd} ");
                 }
             }
         }
