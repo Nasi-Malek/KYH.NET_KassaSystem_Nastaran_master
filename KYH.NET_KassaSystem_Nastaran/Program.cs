@@ -14,36 +14,61 @@ namespace KYH.NET_KassaSystem_Nastaran
     {
         static void Main(string[] args)
         {
-            // Skapa en instans av ErrorManager för felhantering
-            var errorManager = new ErrorManager();
 
-            // Skapa en instans av Receipt och passera in felhanteraren
-            var receipt = new Receipt(errorManager);
-
-            // Skapa ett nytt AdminTool för att hantera produkter och kampanjer
-            var adminTool = new AdminTool();
-
-            try
+            Admin admin = new Admin(new AdminTool()); 
+            while (true)
             {
-                // Konsolutdata för att visa kvittot i terminalen
-                Console.WriteLine(" (301 => 20% rabatt -> 10 kr till 8.00 kr per styck)");
-                Console.WriteLine(" -----------------------------------------------------");
-
-                // Starta en ny kassatransaktion på kampanjdatumet
-                var cashRegister = new CashRegister();
-                cashRegister.StartNewTransactionTest();
-
-                // Starta huvudloopen för kassaflödet
-                cashRegister.Start();
                 Console.Clear();
-                receipt.PrintAndSaveReceipt();
+                Console.WriteLine("1. Ny Kund");
+                Console.WriteLine("2. Admin");
+                Console.WriteLine("0. Avsluta");
 
-            }
-            catch (Exception ex)
-            {
-                // Logga oväntade fel och visa ett generellt felmeddelande
-                errorManager.LogError(ex);
-                errorManager.DisplayError("Ett oväntat fel inträffade.");
+
+                if (int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.WriteLine("Kundmeny: Hantera kundfunktioner här.");
+
+                            break;
+                        case 2:
+                            admin.ShowAdminMenu(); 
+                            break;
+                        case 0:
+                            Console.WriteLine("Programmet avslutas...");
+                            Environment.Exit(0);
+                            break;
+                        default:
+                            Console.WriteLine("Ogiltigt val. Försök igen.");
+                            break;
+                    }
+                }
+
+                // Skapa en instans av ErrorManager för felhantering
+                var errorManager = new ErrorManager();
+
+                // Skapa en instans av Receipt och passera in felhanteraren
+                var receipt = new Receipt(errorManager);
+
+                // Skapa ett nytt AdminTool för att hantera produkter och kampanjer
+                var adminTool = new AdminTool();
+
+                try
+                {
+
+                    var cashRegister = new CashRegister();
+                    cashRegister.StartNewTransactionTest();
+                    cashRegister.Start();
+                    Console.Clear();
+                    receipt.PrintAndSaveReceipt();
+
+                }
+                catch (Exception ex)
+                {
+                    errorManager.LogError(ex);
+                    errorManager.DisplayError("Ett oväntat fel inträffade.");
+                }
             }
         }
     }
