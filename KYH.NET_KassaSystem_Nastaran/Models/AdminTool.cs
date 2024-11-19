@@ -17,10 +17,10 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             try
             {
 
-                var banana = new Product(300, "Banana", 8m, "per styck");
-                var apple = new Product(301, "Apple", 10m, "per styck");
-                var coffee = new Product(302, "Coffee", 35m, "per styck");
-                var milk = new Product(303, "Milk", 10m, "per styck");
+                var banana = new Product(300, "Banana", 8m, "per unit");
+                var apple = new Product(301, "Apple", 10m, "per unit");
+                var coffee = new Product(302, "Coffee", 35m, "per unit");
+                var milk = new Product(303, "Milk", 10m, "per unit");
 
 
                 var appleCampaign = new Campaign(
