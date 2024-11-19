@@ -18,9 +18,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
         public Product(int id, string name, decimal price, string priceType)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Produktnamn kan inte vara tomt.", nameof(name));
+                throw new ArgumentException("Product name cannot be empty.", nameof(name));
             if (price < 0)
-                throw new ArgumentOutOfRangeException(nameof(price), "Priset kan inte vara negativt.");
+                throw new ArgumentOutOfRangeException(nameof(price), "The price cannot be negative.");
 
             Id = id;
             Name = name;
