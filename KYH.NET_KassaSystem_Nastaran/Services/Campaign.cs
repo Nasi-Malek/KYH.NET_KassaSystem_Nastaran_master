@@ -15,10 +15,10 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public Campaign(CampaignType type, decimal discountValue, DateTime startDate, DateTime endDate)
         {
             if (discountValue < 0)
-                throw new ArgumentException("Rabattvärdet kan inte vara negativt.", nameof(discountValue));
+                throw new ArgumentException("The discount value cannot be negative.", nameof(discountValue));
 
             if (endDate < startDate)
-                throw new ArgumentException("Slutdatum kan inte vara tidigare än startdatum.", nameof(endDate));
+                throw new ArgumentException("End date cannot be earlier than start date.", nameof(endDate));
 
             Type = type;
             DiscountValue = discountValue;
@@ -33,7 +33,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public decimal ApplyDiscount(decimal originalPrice)
         {
             if (originalPrice < 0)
-                throw new ArgumentException("Pris kan inte vara negativt.", nameof(originalPrice));
+                throw new ArgumentException("Price cannot be negative.", nameof(originalPrice));
 
             return Type switch
             {
