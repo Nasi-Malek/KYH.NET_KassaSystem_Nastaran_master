@@ -5,7 +5,6 @@ using KYH.NET_KassaSystem_Nastaran.Enum;
 using KYH.NET_KassaSystem_Nastaran.Services;
 
 
-
 namespace KYH.NET_KassaSystem_Nastaran.Models
 {
     public class AdminTool
@@ -16,25 +15,20 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
         {
             try
             {
-                // Skapa exempelprodukter
-                var banana = new Product( 300, "Banana", 8m, "per styck");
-                var apple = new Product(  301, "Apple", 10m, "per styck");
-                var coffee = new Product( 302, "Coffee",35m, "per styck");
-                var milk = new Product(   303, "Milk",  10m, "per styck");
+                var banana = new Product(300, "Banana", 8m, "per styck");
+                var apple = new Product(301, "Apple", 10m, "per styck");
+                var coffee = new Product(302, "Coffee", 35m, "per styck");
+                var milk = new Product(303, "Milk", 10m, "per styck");
 
-                // Skapa en kampanj för Apple
                 var appleCampaign = new Campaign(
-                    CampaignType.PercentageDiscount, // Typ av kampanj
-                    20,                              // Rabatt i procent
+                    CampaignType.PercentageDiscount,  // Typ av kampanj
+                    20m,                              // Rabatt i procent
                     new DateTime(2024, 11, 1),       // Startdatum
-                    new DateTime(2024, 11, 14)       // Slutdatum
+                    new DateTime(2024, 12, 25)       // Slutdatum
                 );
 
-                // Lägg till kampanjen till Apple
                 apple.AddCampaign(appleCampaign);
 
-
-                // Lägg till produkterna till listan
                 AddProduct(banana);
                 AddProduct(apple);
                 AddProduct(coffee);
@@ -45,9 +39,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
                 Console.WriteLine($"Fel vid initiering av produkter: {ex.Message}");
             }
         }
-     
-        /// </summary>
-        /// <param name="product">Produkten som ska läggas till.</param>
+
         public void AddProduct(Product product)
         {
 
@@ -56,7 +48,5 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
 
             Products.Add(product);
         }
-
-
     }
 }
