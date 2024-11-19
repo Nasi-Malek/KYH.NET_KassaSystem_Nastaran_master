@@ -19,7 +19,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public List<Product> Products => _products;
 
 
-        // Visa huvudmenyn för Admin
+        
         public void ShowAdminMenu()
         {
             int choice;
@@ -72,7 +72,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         }
 
 
-        // 1. Uppdatera produktnamn eller pris
+      
         private void UpdateProductDetails()
         {
             try
@@ -114,7 +114,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             }
         }
 
-        // 2. Lägg till en ny produkt
+        
         private void AddNewProduct()
         {
             try
@@ -151,7 +151,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             }
         }
 
-        // 3. Hantera kampanjpriser för produkter
+       
         private void ManageCampaignPrices()
         {
             try
@@ -210,7 +210,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             }
         }
 
-        // 4. Lägg till eller ta bort kampanjer för produkter
+       
         private void AddOrRemoveCampaign()
         {
             try
