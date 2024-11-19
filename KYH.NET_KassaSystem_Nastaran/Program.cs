@@ -31,7 +31,7 @@ namespace KYH.NET_KassaSystem_Nastaran
                     Console.WriteLine("0. Exit");
                     Console.Write("\nSelect an Option: ");
 
-                    // Läsa in användarens val
+                    
                     if (int.TryParse(Console.ReadLine(), out int choice))
                     {
                         switch (choice)
@@ -58,7 +58,7 @@ namespace KYH.NET_KassaSystem_Nastaran
                 }
                 catch (Exception ex)
                 {
-                    // Hantera oväntade fel
+
                     errorManager.LogError(ex);
                     errorManager.DisplayError("An unexpected error occurred. Please try again.");
                 }
