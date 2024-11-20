@@ -144,10 +144,10 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
                 writer.WriteLine("*===================================================*");
                 writer.WriteLine("\t\t** FOOD & SUPERMARKET SOLNA **\n");
-                writer.WriteLine(" Opening hrs:\t\t\t\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
+                writer.WriteLine(" Opening hrs:\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
                 writer.WriteLine("-----------------------------------------------------");
-                writer.WriteLine($"Cashier: 1214\t\t\t\t\t\t\tRECEIPT: #{ReceiptNumber}");
-                writer.WriteLine($"Date: {Date:yyyy-MM-dd}\t\t\t\t\t\tTime: {Date:HH:mm:ss}");
+                writer.WriteLine($"Cashier: 1214\t\t\t\tRECEIPT: #{ReceiptNumber}");
+                writer.WriteLine($"Date: {Date:yyyy-MM-dd}\t\t\tTime: {Date:HH:mm:ss}");
                 writer.WriteLine("-----------------------------------------------------");
                 foreach (var item in Items)
 
