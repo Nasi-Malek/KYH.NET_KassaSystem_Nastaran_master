@@ -1,18 +1,17 @@
 *===================================================*
 		** FOOD & SUPERMARKET SOLNA **
 
- Opening hrs:		Centralvägen 16
- Mon-Fri   07:00-22:00		171 42, SOLNA
+ Opening hrs:						Centralvägen 16
+ Mon-Fri   07:00-22:00					171 42, SOLNA
  Sat-Sun   08:00-22:00
 -----------------------------------------------------
-Cashier: 1214		RECEIPT: #25
-Date: 2024-11-20	Time: 00:29:46
+Cashier: 1214						RECEIPT: #43
+Date: 2024-11-20					Time: 01:12:27
 -----------------------------------------------------
-Banana	3 x 8,00 kr = 24,00 kr
-Apple	4 x 10,00 kr = 32,00 kr
+Apple	44 x 10,00 kr = 352,00 kr
 -----------------------------------------------------
-Total (excl. VAT): 56,00 kr
-VAT (25%):         14,00 kr
-Total (incl. VAT): 70,00 kr
+Total (excl. VAT): 352,00 kr
+VAT (25%):         88,00 kr
+Total (incl. VAT): 440,00 kr
 -----------------------------------------------------
 		** Thank you, Welcome back! **
