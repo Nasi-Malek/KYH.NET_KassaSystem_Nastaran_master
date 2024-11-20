@@ -1,9 +1,11 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using KYH.NET_KassaSystem_Nastaran.Models;
 using KYH.NET_KassaSystem_Nastaran.Interface;
+using System.Text.RegularExpressions;
 
 namespace KYH.NET_KassaSystem_Nastaran.Services
 {
@@ -17,6 +19,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public List<(Product product, int quantity)> Items { get; private set; } = new List<(Product, int)>();
         public DateTime Date { get; private set; } = DateTime.Now;
 
+
         private static string receiptCounterFilePath = "ReceiptCounter.txt";
         private static string receiptFilePath = "../../../Files/Receipts";
 
@@ -24,9 +27,12 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         {
             _errorManager = errorManager ?? throw new ArgumentNullException(nameof(errorManager));
             ReceiptNumber = receiptCounter;
+
         }
 
+
         public void AddItem(Product product, int quantity)
+
         {
             if (!ValidateProduct(product))
                 return;
@@ -38,7 +44,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
             Items.Add((product, quantity));
-            Console.WriteLine($"Product: {product.Name}\nNumber: {quantity}\nPrice: {effectivePrice:C}");
+            Console.WriteLine($"Produkt: {product.Name}\nAntal: {quantity}\nPris: {effectivePrice:C}");
         }
 
         private bool ValidateProduct(Product product)
@@ -49,26 +55,25 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(product.Name))
+            if (string.IsNullOrWhiteSpace(product.Name) || !Regex.IsMatch(product.Name, @"^[a-zA-Z\s]+$"))
             {
-                _errorManager.DisplayError("The product does not have a valid name.");
+                _errorManager.DisplayError("The product name is invalid. Only alphabetic characters are allowed.");
                 return false;
             }
 
-            if (product.Price <= 0)
+            if (!Regex.IsMatch(product.Price.ToString(), @"^\d+(\.\d{1,2})?$") || product.Price <= 0)
             {
-                _errorManager.DisplayError($"Produkten '{product.Name}' har ett ogiltigt pris: {product.Price:C}. Priset måste vara större än 0.");
+                _errorManager.DisplayError($"The product '{product.Name}' has an invalid price: {product.Price:C}. Only positive numbers are allowed.");
                 return false;
             }
 
             return true;
         }
-
         private bool ValidateQuantity(int quantity)
         {
             if (quantity <= 0)
             {
-                _errorManager.DisplayError("Antalet måste vara större än 0.");
+                _errorManager.DisplayError("Quantity must be greater than 0.");
                 return false;
             }
 
@@ -79,21 +84,40 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         {
             foreach (var campaign in product.Campaigns)
             {
-                if (campaign.StartDate > campaign.EndDate)
+                if (!ValidateCampaignDates(campaign.StartDate, campaign.EndDate))
                 {
-                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' har ett ogiltigt datumintervall: Startdatum {campaign.StartDate:yyyy-MM-dd} är efter slutdatum {campaign.EndDate:yyyy-MM-dd} .");
+                    _errorManager.DisplayError($"The campaign '{campaign.Type}' for '{product.Name}' has invalid dates: Start date {campaign.StartDate:yyyy-MM-dd}, End date {campaign.EndDate:yyyy-MM-dd}.");
+                    continue;
                 }
-                else if (campaign.EndDate < DateTime.Now)
-                {
-                    _errorManager.DisplayError($"Kampanjen '{campaign.Type}' för '{product.Name}' är inte längre giltig (Slutdatum: {campaign.EndDate:yyyy-MM-dd} ).");
-                }
-                else
-                {
-                    Console.WriteLine($"Campaign: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}, End: {campaign.EndDate:yyyy-MM-dd} ");
-                }
+
+                Console.WriteLine($"Campaign: {campaign.Type}, Start: {campaign.StartDate:yyyy-MM-dd}, End: {campaign.EndDate:yyyy-MM-dd}");
             }
         }
 
+        private bool ValidateCampaignDates(DateTime startDate, DateTime endDate)
+        {
+            var currentYear = DateTime.Now.Year;
+
+            if (startDate.Year != currentYear || endDate.Year != currentYear)
+            {
+                _errorManager.DisplayError($"The campaign start and end dates must be in the current year ({currentYear}).");
+                return false;
+            }
+
+            if (startDate > endDate)
+            {
+                _errorManager.DisplayError("The start date cannot be after the end date.");
+                return false;
+            }
+
+            if (endDate < DateTime.Now)
+            {
+                _errorManager.DisplayError("The campaign has already expired.");
+                return false;
+            }
+
+            return true;
+        }
         private decimal CalculateTotalExcludingVat()
         {
             return Items.Sum(item => item.product.GetEffectivePrice(Date) * item.quantity);
@@ -117,14 +141,16 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             string filePath = Path.Combine(receiptFilePath, $"Receipt_{Date:yyyy-MM-dd}_#{ReceiptNumber}.txt");
             using (StreamWriter writer = new StreamWriter(filePath))
             {
+
                 writer.WriteLine("*===================================================*");
                 writer.WriteLine("\t\t** FOOD & SUPERMARKET SOLNA **\n");
-                writer.WriteLine(" Opening hrs:\t\t\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
+                writer.WriteLine(" Opening hrs:\t\t\t\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
                 writer.WriteLine("-----------------------------------------------------");
-                writer.WriteLine($"Cashier: 1214\t\t\t\t\t\tRECEIPT: #{ReceiptNumber}");
-                writer.WriteLine($"Date: {Date:yyyy-MM-dd}\t\t\t\t\tTime: {Date:HH:mm:ss}");
+                writer.WriteLine($"Cashier: 1214\t\t\t\t\t\t\tRECEIPT: #{ReceiptNumber}");
+                writer.WriteLine($"Date: {Date:yyyy-MM-dd}\t\t\t\t\t\tTime: {Date:HH:mm:ss}");
                 writer.WriteLine("-----------------------------------------------------");
                 foreach (var item in Items)
+
                 {
                     decimal itemTotal = item.product.GetEffectivePrice(Date) * item.quantity;
                     writer.WriteLine($"{item.product.Name}\t{item.quantity} x {item.product.Price:C} = {itemTotal:C}");
@@ -140,6 +166,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             Console.WriteLine("\n--- Receipt ---");
             foreach (var item in Items)
             {
+
                 decimal itemTotal = item.product.GetEffectivePrice(Date) * item.quantity;
                 Console.WriteLine($"{item.product.Name}\t{item.quantity} x {item.product.Price:C} = {itemTotal:C}");
             }
@@ -152,7 +179,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             SaveReceiptCounter();
         }
 
+
         private static int LoadReceiptCounter()
+
         {
             string path = "ReceiptCounter.txt";
             if (File.Exists(path))
@@ -161,8 +190,10 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         }
 
         private static void SaveReceiptCounter()
+
         {
             File.WriteAllText("ReceiptCounter.txt", receiptCounter.ToString());
         }
+
     }
 }
