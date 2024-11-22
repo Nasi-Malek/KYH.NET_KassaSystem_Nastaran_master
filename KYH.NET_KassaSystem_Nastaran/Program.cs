@@ -65,6 +65,7 @@ namespace KYH.NET_KassaSystem_Nastaran
 
                 Console.WriteLine("\nPress any key to continue...");
                 Console.ReadKey();
+                
             }
         }
 
@@ -83,7 +84,7 @@ namespace KYH.NET_KassaSystem_Nastaran
                 
 
                 receipt.PrintAndSaveReceipt();
-
+               
             }
             catch (Exception ex)
             {
