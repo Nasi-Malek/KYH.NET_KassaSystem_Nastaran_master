@@ -50,7 +50,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
         }
 
-
+        // Starta en ny transaktion för en kund
         public void StartNewTransactionTest()
         {
 
@@ -61,16 +61,19 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             while (true)
             {
 
-                Console.WriteLine("Commands: <productID> <number> or PAY");
+                Console.WriteLine("Commands: <product ID> <number> or PAY");
                 var command = Console.ReadLine()?.Split(' ');
 
-                if (command[0] == "PAY")
+                if (command.Length > 0 && string.Equals(command[0], "PAY", StringComparison.OrdinalIgnoreCase))
                 {
+
                     currentReceipt.PrintAndSaveReceipt();
                     break;
+
                 }
-                else if (int.TryParse(command[0], out int productId) && int.TryParse(command[1], out int quantity))
+                else if (command.Length > 1 && int.TryParse(command[0], out int productId) && int.TryParse(command[1], out int quantity))
                 {
+
                     try
                     {
 
@@ -78,9 +81,8 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                         if (product != null)
                         {
                             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
-
-
                             currentReceipt.AddItem(product, quantity);
+
                         }
                         else
                         {
@@ -89,7 +91,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                     }
                     catch (Exception ex)
                     {
-                        errorManager.LogError(ex); 
+                        errorManager.LogError(ex); // Logga fel
                         errorManager.DisplayError("An error occurred while adding product.");
                     }
                 }

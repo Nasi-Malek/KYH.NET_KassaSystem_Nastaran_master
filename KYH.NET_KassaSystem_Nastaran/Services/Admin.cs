@@ -9,17 +9,37 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 {
     public class Admin
     {
+
+        private void EnsureCampaignFileExists()
+        {
+            string campaignFilePath = "../../../Files/Campaigns.txt";
+            if (!File.Exists(campaignFilePath))
+            {
+                // Skapa en ny kampanjfil
+                using (StreamWriter sw = File.CreateText(campaignFilePath))
+                {
+                    sw.WriteLine("Campaign file created.");
+                }
+            }
+        }
+
+        private readonly AdminTool _adminTool;
         private List<Product> _products;
+        public Admin(List<Product> products)
+        {
+            _products = products ?? throw new ArgumentNullException(nameof(products));
+        }
 
         public Admin(AdminTool adminTool)
         {
+            _adminTool = adminTool;
             _products = adminTool.Products ?? new List<Product>();
         }
 
         public List<Product> Products => _products;
 
 
-        
+        // Visa huvudmenyn för Admin
         public void ShowAdminMenu()
         {
             int choice;
@@ -29,8 +49,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 Console.WriteLine("1. Change Product Name or Price");
                 Console.WriteLine("2. Add New Product");
                 Console.WriteLine("3. Manage Campaign Prices");
-                Console.WriteLine("4. Add/Remove Campaigns");
-                Console.WriteLine("5. Back to Main Menu");
+                Console.WriteLine("4. Add/Remove Campaign");
+                Console.WriteLine("5. View Product List");
+                Console.WriteLine("6. Back to Main Menu");
                 Console.Write("Choose an option: ");
 
                 if (int.TryParse(Console.ReadLine(), out choice))
@@ -52,6 +73,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                                 AddOrRemoveCampaign();
                                 break;
                             case 5:
+                                DisplayProductListFromFile();
+                                break;
+                            case 6:
                                 Console.WriteLine("Exiting Admin Menu.");
                                 break;
                             default:
@@ -68,11 +92,11 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 {
                     Console.WriteLine("Invalid input. Please enter a valid number.");
                 }
-            } while (choice != 5);
+            } while (choice != 6);
         }
 
 
-      
+        // 1. Uppdatera produktnamn eller pris
         private void UpdateProductDetails()
         {
             try
@@ -94,14 +118,14 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                         product.Name = newName;
                     }
 
-                    Console.Write($"Enter new price for {product.Name} (or press Enter to keep current price): ");
-                    string newPriceInput = Console.ReadLine();
-                    if (decimal.TryParse(newPriceInput, out decimal newPrice) && newPrice >= 0)
+                    Console.Write($"Enter new price for {product.Name} (or press Enter to keep current): ");
+                    if (decimal.TryParse(Console.ReadLine(), out decimal newPrice) && newPrice >= 0)
                     {
                         product.Price = newPrice;
                     }
 
-                    Console.WriteLine("Product details updated successfully.");
+                    _adminTool.SaveProductsToFile(); // Spara ändringar till fil
+                    Console.WriteLine("Product updated successfully.");
                 }
                 else
                 {
@@ -114,7 +138,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             }
         }
 
-        
+        // 2. Lägg till en ny produkt
         private void AddNewProduct()
         {
             try
@@ -132,7 +156,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                         string priceType = Console.ReadLine();
 
                         var newProduct = new Product(id, name, price, priceType);
-                        _products.Add(newProduct);
+                        _adminTool.AddProduct(newProduct);
                         Console.WriteLine("New product added successfully.");
                     }
                     else
@@ -150,8 +174,43 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 Console.WriteLine($"Error adding product: {ex.Message}");
             }
         }
+        public void DisplayProductListFromFile()
+        {
 
-       
+            string _filePath = "../../../Files/Products.txt";
+            if (File.Exists(_filePath))
+            {
+                try
+                {
+                    var productData = File.ReadAllLines(_filePath);
+                    Console.WriteLine("\n--- Product List ---");
+
+                    if (productData.Length == 0)
+                    {
+                        Console.WriteLine("The file is empty. No products to display.");
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        foreach (var product in productData)
+
+                        {
+                            Console.WriteLine(product);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading product file: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No product file found.");
+            }
+        }
+
+        // 3. Hantera kampanjpriser för produkter
         private void ManageCampaignPrices()
         {
             try
@@ -162,6 +221,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                     var product = _products.FirstOrDefault(p => p.Id == productId);
                     if (product == null)
                     {
+
                         Console.WriteLine("Product not found.");
                         return;
                     }
@@ -188,6 +248,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                             var newCampaign = new Campaign(campaignType, discountValue, startDate, endDate);
                             product.AddCampaign(newCampaign);
                             Console.WriteLine("Campaign added successfully.");
+
                         }
                         else
                         {
@@ -210,7 +271,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             }
         }
 
-       
+        // 4. Lägg till eller ta bort kampanjer för produkter
         private void AddOrRemoveCampaign()
         {
             try
@@ -282,6 +343,9 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             {
                 Console.WriteLine($"Error managing campaigns: {ex.Message}");
             }
+
+
         }
+
     }
 }

@@ -12,7 +12,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
     public class Receipt
     {
         private readonly IErrorManager _errorManager;
-        private const decimal VatRate = 0.25m; // Momssats (25%)
+        private const decimal VatRate = 0.25m; // VAT (25%)
 
         private static int receiptCounter = LoadReceiptCounter();
         public int ReceiptNumber { get; private set; }
@@ -32,8 +32,8 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
 
         public void AddItem(Product product, int quantity)
-
         {
+
             if (!ValidateProduct(product))
                 return;
 
@@ -45,6 +45,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             decimal effectivePrice = product.GetEffectivePrice(DateTime.Now);
             Items.Add((product, quantity));
             Console.WriteLine($"Produkt: {product.Name}\nAntal: {quantity}\nPris: {effectivePrice:C}");
+
         }
 
         private bool ValidateProduct(Product product)
@@ -131,6 +132,12 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public void PrintAndSaveReceipt()
         {
             ReceiptNumber = receiptCounter++;
+
+            if (Date.Date != DateTime.Now.Date)
+            {
+                Date = DateTime.Now;
+                Items.Clear(); // Starta nytt kvitto för ny dag
+            }
             decimal totalExclVat = CalculateTotalExcludingVat();
             decimal vat = CalculateVat();
             decimal totalInclVat = totalExclVat + vat;
@@ -138,13 +145,14 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             if (!Directory.Exists(receiptFilePath))
                 Directory.CreateDirectory(receiptFilePath);
 
-            string filePath = Path.Combine(receiptFilePath, $"Receipt_{Date:yyyy-MM-dd}_#{ReceiptNumber}.txt");
-            using (StreamWriter writer = new StreamWriter(filePath))
+            string filePath = Path.Combine(receiptFilePath, $"Receipt_{Date:yyyy-MM-dd}.txt");
+
+            using (StreamWriter writer = new StreamWriter(filePath, append: true))
             {
 
                 writer.WriteLine("*===================================================*");
-                writer.WriteLine("\t\t** FOOD & SUPERMARKET SOLNA **\n");
-                writer.WriteLine(" Opening hrs:\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
+                writer.WriteLine("\t\t** MAX SUPERMARKET SOLNA **\n");
+                writer.WriteLine(" Opening hrs:\t\t\t\t\tCentralvägen 16\n Mon-Fri   07:00-22:00\t\t\t171 42, SOLNA\n Sat-Sun   08:00-22:00");
                 writer.WriteLine("-----------------------------------------------------");
                 writer.WriteLine($"Cashier: 1214\t\t\t\tRECEIPT: #{ReceiptNumber}");
                 writer.WriteLine($"Date: {Date:yyyy-MM-dd}\t\t\tTime: {Date:HH:mm:ss}");
@@ -160,7 +168,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 writer.WriteLine($"VAT (25%):         {vat:C}");
                 writer.WriteLine($"Total (incl. VAT): {totalInclVat:C}");
                 writer.WriteLine("-----------------------------------------------------");
-                writer.WriteLine("\t\t** Thank you, Welcome back! **");
+                writer.WriteLine("\t\t** Thank you, Welcome back! **\n\n\n\n\n\n\n\n");
             }
 
             Console.WriteLine("\n--- Receipt ---");
@@ -177,6 +185,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             Console.WriteLine("------------------------");
 
             SaveReceiptCounter();
+
         }
 
 
