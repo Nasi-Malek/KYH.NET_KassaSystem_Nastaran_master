@@ -136,7 +136,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             if (Date.Date != DateTime.Now.Date)
             {
                 Date = DateTime.Now;
-                Items.Clear(); // Starta nytt kvitto för ny dag
+                Items.Clear(); 
             }
             decimal totalExclVat = CalculateTotalExcludingVat();
             decimal vat = CalculateVat();
