@@ -12,7 +12,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
         private void EnsureCampaignFileExists()
         {
-            string campaignFilePath = "../../../Files/Campaigns.txt";
+            string campaignFilePath = "../../../Campaigns";
             if (!File.Exists(campaignFilePath))
             {
                 // Skapa en ny kampanjfil
