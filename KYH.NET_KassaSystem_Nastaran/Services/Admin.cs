@@ -10,16 +10,22 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
     public class Admin
     {
 
-        private void EnsureCampaignFileExists()
+        private readonly string folderPath = "../../../Campaign";
+        private readonly string FilePath;
+
+
+        public void LoadCampaignsFromFile(string FilePath)
         {
-            string campaignFilePath = "../../../Campaigns";
-            if (!File.Exists(campaignFilePath))
+            string folderPath = Path.GetDirectoryName(FilePath);
+            FilePath = Path.Combine(folderPath);
+            if (!Directory.Exists(folderPath))
             {
-                // Skapa en ny kampanjfil
-                using (StreamWriter sw = File.CreateText(campaignFilePath))
-                {
-                    sw.WriteLine("Campaign file created.");
-                }
+                Directory.CreateDirectory(folderPath);
+            }
+           
+            if (!File.Exists(FilePath))
+            {
+                File.WriteAllText(FilePath, "[]");
             }
         }
 
