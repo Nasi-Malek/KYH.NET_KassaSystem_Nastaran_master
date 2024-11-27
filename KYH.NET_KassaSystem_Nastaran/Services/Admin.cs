@@ -10,9 +10,10 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
     public class Admin
     {
 
-        private readonly string folderPath = "../../../Campaign";
-        private readonly string FilePath;
 
+        private readonly string folderPath = "../../../Campaign.txt";
+        private readonly string FilePath;
+       
 
         public void LoadCampaignsFromFile(string FilePath)
         {

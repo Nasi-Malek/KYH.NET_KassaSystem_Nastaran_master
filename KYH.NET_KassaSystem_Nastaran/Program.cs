@@ -13,7 +13,7 @@ namespace KYH.NET_KassaSystem_Nastaran
     {
         static void Main(string[] args)
         {
-
+           
             Admin admin = new Admin(new AdminTool());
             var errorManager = new ErrorManager();
             var receipt = new Receipt(errorManager);
@@ -84,7 +84,7 @@ namespace KYH.NET_KassaSystem_Nastaran
                 
 
                 receipt.PrintAndSaveReceipt();
-               
+                
             }
             catch (Exception ex)
             {

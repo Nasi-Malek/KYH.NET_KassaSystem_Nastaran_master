@@ -1,6 +1,7 @@
 ﻿using KYH.NET_KassaSystem_Nastaran.Enum;
 using KYH.NET_KassaSystem_Nastaran.Services;
 using System;
+using System.Globalization;
 
 
 namespace KYH.NET_KassaSystem_Nastaran.Services
@@ -42,5 +43,23 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 _ => originalPrice
             };
         }
+
+        public string ToFileString()
+        {
+            return $"{Type}:{DiscountValue}:{StartDate:yyyy-MM-dd}:{EndDate:yyyy-MM-dd}";
+        }
+
+        // Deserialisera från en sträng
+        public static Campaign FromString(string data)
+        {
+            var parts = data.Split(':');
+            return new Campaign(
+                CampaignType.Parse<CampaignType>(parts[0]),
+                decimal.Parse(parts[1], CultureInfo.InvariantCulture),
+                DateTime.ParseExact(parts[2], "yyyy-MM-dd", CultureInfo.InvariantCulture),
+                DateTime.ParseExact(parts[3], "yyyy-MM-dd", CultureInfo.InvariantCulture)
+            );
+        }
+
     }
 }
