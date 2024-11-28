@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
-using KYH.NET_KassaSystem_Nastaran.Enum;
 using KYH.NET_KassaSystem_Nastaran.Interface;
 using KYH.NET_KassaSystem_Nastaran.Models;
 using KYH.NET_KassaSystem_Nastaran.Services;
+
+
+
 
 namespace KYH.NET_KassaSystem_Nastaran
 {
@@ -27,7 +29,6 @@ namespace KYH.NET_KassaSystem_Nastaran
                     Console.Clear();
                     Console.WriteLine("\n---** Main Menu **---\n");
                     Console.WriteLine("1. New Customer");
-                    Console.WriteLine("2. Admin");
                     Console.WriteLine("0. Exit");
                     Console.Write("\nSelect an Option: ");
 
@@ -38,10 +39,7 @@ namespace KYH.NET_KassaSystem_Nastaran
                         {
                             case 1:
                                 HandleCustomer(receipt);
-                                break;
-                            case 2:
-                                admin.ShowAdminMenu();
-                                break;
+                                break;                           
                             case 0:
                                 Console.WriteLine("\nThe program is closing. Thank you for using our application!");
                                 Environment.Exit(0);
@@ -58,16 +56,17 @@ namespace KYH.NET_KassaSystem_Nastaran
                 }
                 catch (Exception ex)
                 {
-                    // Hantera oväntade fel
+                   
                     errorManager.LogError(ex);
                     errorManager.DisplayError("An unexpected error occurred. Please try again.");
                 }
 
                 Console.WriteLine("\nPress any key to continue...");
-                Console.ReadKey();
-                
+                Console.ReadKey();                
             }
         }
+
+
 
         static void HandleCustomer(Receipt receipt)
         {
@@ -75,7 +74,8 @@ namespace KYH.NET_KassaSystem_Nastaran
             {
                 Console.Clear();
                 Console.WriteLine("---  Main Menu ---\n");
-                Console.WriteLine("Here you can add products, manage receipts, etc.");
+                Console.WriteLine(" Here you can add products, manage receipts, etc. ");
+                Console.WriteLine("  ==============================================\n ");
 
 
                 var cashRegister = new CashRegister();

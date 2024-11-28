@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KYH.NET_KassaSystem_Nastaran.Enum;
 using KYH.NET_KassaSystem_Nastaran.Services;
 
 
@@ -16,7 +15,6 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
         public string PriceType { get; set; }
         public DateTime currentDate { get; set; }
         public List<Campaign> Campaigns { get; set; } = new List<Campaign>();
-
         public List<Product> products => products;
         public Product(int id, string name, decimal price, string priceType)
         {
@@ -26,11 +24,14 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             if (price < 0)
                 throw new ArgumentOutOfRangeException(nameof(price), "Priset kan inte vara negativt.");
 
+
             Id = id;
             Name = name;
             Price = price;
             PriceType = priceType;
         }
+
+
 
         public decimal GetPriceWithActiveCampaign()
         {
@@ -49,6 +50,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
         }
 
 
+
         public void AddCampaign(Campaign campaign)
         {
             if (campaign == null)
@@ -56,6 +58,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
 
             Campaigns.Add(campaign);
         }
+
 
         public void RemoveCampaign(Campaign campaign)
         {
@@ -65,12 +68,12 @@ namespace KYH.NET_KassaSystem_Nastaran.Models
             Campaigns.Remove(campaign);
         }
 
+
+
         public decimal GetEffectivePrice(DateTime date)
         {
             var activeCampaign = Campaigns.FirstOrDefault(c => c.IsActive(date));
             return activeCampaign != null ? activeCampaign.ApplyDiscount(Price) : Price;
-
-
 
         }
     }

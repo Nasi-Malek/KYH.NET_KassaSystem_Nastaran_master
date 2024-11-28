@@ -1,7 +1,9 @@
-﻿using KYH.NET_KassaSystem_Nastaran.Enum;
-using KYH.NET_KassaSystem_Nastaran.Services;
+﻿using KYH.NET_KassaSystem_Nastaran.Services;
 using System;
 using System.Globalization;
+
+
+
 
 
 namespace KYH.NET_KassaSystem_Nastaran.Services
@@ -12,6 +14,8 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         public decimal DiscountValue { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
+
 
         public Campaign(CampaignType type, decimal discountValue, DateTime startDate, DateTime endDate)
         {
@@ -28,7 +32,6 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         }
 
         public bool IsActive(DateTime date) => date >= StartDate && date <= EndDate;
-
 
 
         public decimal ApplyDiscount(decimal originalPrice)
@@ -49,7 +52,7 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
             return $"{Type}:{DiscountValue}:{StartDate:yyyy-MM-dd}:{EndDate:yyyy-MM-dd}";
         }
 
-        // Deserialisera från en sträng
+      
         public static Campaign FromString(string data)
         {
             var parts = data.Split(':');
@@ -60,6 +63,5 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
                 DateTime.ParseExact(parts[3], "yyyy-MM-dd", CultureInfo.InvariantCulture)
             );
         }
-
     }
 }

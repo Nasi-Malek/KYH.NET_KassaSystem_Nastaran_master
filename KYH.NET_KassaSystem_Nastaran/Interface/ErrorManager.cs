@@ -2,7 +2,10 @@
 using System.IO;
 using KYH.NET_KassaSystem_Nastaran.Interface;
 
-namespace KYH.NET_KassaSystem_Nastaran.Services
+
+
+
+namespace KYH.NET_KassaSystem_Nastaran.Interface
 {
     public class ErrorManager : IErrorManager
     {

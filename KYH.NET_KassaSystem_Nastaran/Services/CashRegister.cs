@@ -26,22 +26,23 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
         }
 
 
+
         public void Start()
         {
             while (true)
             {
 
                 Console.WriteLine();
-                Console.WriteLine("1. New customer\n2. Admin\n0. Exit");
+                Console.WriteLine("1. New customer\n0. Exit");
                 var input = Console.ReadLine();
                 if (input == "1")
                 {
                     StartNewTransactionTest();
                 }
-                else if (input == "2")
+                /*else if (input == "2")
                 {
                     _admin.ShowAdminMenu();
-                }
+                }*/
                 else if (input == "0")
                 {
                     break;
@@ -50,7 +51,8 @@ namespace KYH.NET_KassaSystem_Nastaran.Services
 
         }
 
-        // Starta en ny transaktion för en kund
+       
+
         public void StartNewTransactionTest()
         {
 
